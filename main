@@ -1,0 +1,65 @@
+#include <Servo.h>  // Include the Servo library
+
+// ------------------------------------------------------------------------------
+// Global Section - assigns variables to pin numbers
+// ------------------------------------------------------------------------------
+
+Servo servo_9;  // Create a Servo object named "servo_9"
+int inches = 0;  // Initialize a variable for inches
+int cm = 0;  // Initialize a variable for centimeters
+int pos = 0;  // Initialize a variable for servo position
+
+// Function to read ultrasonic distance
+long readUltrasonicDistance(int triggerPin, int echoPin) {
+  pinMode(triggerPin, OUTPUT);  // Set trigger pin as OUTPUT
+  digitalWrite(triggerPin, LOW);  // Set trigger pin LOW
+  delayMicroseconds(2);  // Wait for 2 microseconds
+  digitalWrite(triggerPin, HIGH);  // Set trigger pin HIGH
+  delayMicroseconds(10);  // Wait for 10 microseconds
+  digitalWrite(triggerPin, LOW);  // Set trigger pin LOW
+  pinMode(echoPin, INPUT);  // Set echo pin as INPUT
+  return pulseIn(echoPin, HIGH);  // Measure pulse duration and return
+}
+
+// ------------------------------------------------------------------------------
+// Setup - executes once
+// ------------------------------------------------------------------------------
+
+void setup() {
+  servo_9.attach(9);  // Attach servo to pin 9
+  Serial.begin(9600);  // Initialize serial communication
+}
+
+// ------------------------------------------------------------------------------
+// Loop - plays the melody indefinitely
+// ------------------------------------------------------------------------------
+
+void loop() {
+  cm = 0.01723 * readUltrasonicDistance(7, 7);  // Calculate distance in centimeters
+  inches = cm / 2.54;  // Convert centimeters to inches
+
+  Serial.print(inches);  // Print inches value
+  Serial.print("in, ");  // Print label for inches
+  Serial.print(cm);  // Print centimeters value
+  Serial.println("cm");  // Print label for centimeters
+
+  delay(100);  // Wait for 100 milliseconds
+
+  if (cm < 5) {  // If distance is less than 5 cm
+    servo_9.attach(9, 500, 2500);  // Attach servo with custom pulse width range
+
+    // Sweep the servo from 0 to 180 degrees in steps of 2 degrees
+    for (pos = 0; pos <= 90; pos += 2) {
+      servo_9.write(pos);  // Set servo position
+      delay(15);  // Wait for 15 milliseconds
+    }
+
+    delay(1000);  // Wait for 1 second
+
+    // Sweep the servo back from 180 to 0 degrees
+    for (pos = 90; pos >= 0; pos -= 2) {
+      servo_9.write(pos);  // Set servo position
+      delay(15);  // Wait for 15 milliseconds
+    }
+  }
+}
