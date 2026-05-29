@@ -61,6 +61,9 @@ the main loop clean and readable.
 
 ## Demo
 
+![Circuit wiring](docs/circuit%20wiring.webp)
+![TinkerCAD circuit diagram](docs/circuit%20diagram.webp)
+
 > Demo video available on my [portfolio](https://bush-aurora-6f7.notion.site/Autonomous-Driveway-Gate-3303afb3d1d580e78652dfbd756dbc8b)
 
 ---
